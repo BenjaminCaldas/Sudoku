@@ -11,6 +11,6 @@ CSolveur::CSolveur(CSolveur & SLVUnSolveur) {
 
 CSolveur::~CSolveur() {}
 
-void CSolveur::SLVResoudre(CSudoku SDKSudoku) {
+void CSolveur::SLVResoudre(CGrille GRISudoku) {
 
 }

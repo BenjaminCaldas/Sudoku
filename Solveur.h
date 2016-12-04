@@ -13,6 +13,6 @@ class CSolveur
 		CSolveur();
 		CSolveur(CSolveur & SLVUnSolveur);
 		~CSolveur();
-		void SLVResoudre(CSudoku SDKSudoku);
+		void SLVResoudre(CGrille GRISudoku);
 };
 
