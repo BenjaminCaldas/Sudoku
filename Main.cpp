@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <iostream>
 
-#include "Sudoku.h"
+#include "Grille.h"
+#include "ControleurGrille.h"
+#include "Solveur.h"
 
 using namespace std;
 
@@ -22,8 +24,11 @@ int main (unsigned int argc, char * argv[])
 	ppuiGrille[6][4] = 1;ppuiGrille[6][5] = 6;ppuiGrille[6][8] = 5;
 	ppuiGrille[7][0] = 8;ppuiGrille[7][6] = 9;
 	ppuiGrille[8][0] = 7;ppuiGrille[8][1] = 6;ppuiGrille[8][4] = 8;ppuiGrille[8][5] = 9;ppuiGrille[8][7] = 4;
-	CGrille GRISudoku1(ppuiGrille, 9);
-	GRISudoku1.GRIAfficherGrille();
+	
+	CGrille GRIGrille1(ppuiGrille, 9);
+
+	CSolveur SLVSolveur1(&GRIGrille1);
+	SLVSolveur1.SLVResoudre();
 
 	int a;
 	cin >> a;

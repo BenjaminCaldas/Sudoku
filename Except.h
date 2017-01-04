@@ -6,7 +6,7 @@ de la levée d'exceptions dans un programme.
 **************************************************************/
 #pragma once
 // Définitions de quelques valeurs de CExcept utiles à notre programme
-#define EXC_DFLT 0 // Valeur pas défault
+#define EXC_DFLT 0 // Valeur par défaut
 //...
 
 class CExcept

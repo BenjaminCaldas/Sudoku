@@ -7,9 +7,9 @@
 
 class CChargeurPartie
 {
-public:
-	CChargeurPartie(void);
-	CPartie * CHPLireFichier(char * pcChemin);
+	public:
+		CChargeurPartie();
+		CPartie * CHPLireFichier(char * pcChemin);
 };
 
 #endif

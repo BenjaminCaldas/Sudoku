@@ -15,21 +15,17 @@ CGrille::CGrille(CGrille & GRIUnSudoku) {
 
 	uiGRITaille = GRIUnSudoku.uiGRITaille;
 	ppuiGRIGrille = new unsigned int * [uiGRITaille];
-	ppuiGRIGrilleBase = new unsigned int * [uiGRITaille];
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle) {
 		ppuiGRIGrille[uiBoucle] = new unsigned int [uiGRITaille];
-		ppuiGRIGrilleBase[uiBoucle] = new unsigned int [uiGRITaille];
 	}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2) {
 			ppuiGRIGrille[uiBoucle][uiBoucle2] = GRIUnSudoku.ppuiGRIGrille[uiBoucle][uiBoucle2];
-			ppuiGRIGrilleBase[uiBoucle][uiBoucle2] = ppuiGRIGrille[uiBoucle][uiBoucle2];
 		}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2)
 			if ((ppuiGRIGrille[uiBoucle][uiBoucle2] > 9) || (ppuiGRIGrille[uiBoucle][uiBoucle2] < 1)) {
 				ppuiGRIGrille[uiBoucle][uiBoucle2] = 0;
-				ppuiGRIGrilleBase[uiBoucle][uiBoucle2] = 0;
 			}
 }
 
@@ -39,21 +35,17 @@ CGrille::CGrille(unsigned int ** uiUneGrille, unsigned int uiUneTaille) {
 
 	uiGRITaille = uiUneTaille;
 	ppuiGRIGrille = new unsigned int * [uiGRITaille];
-	ppuiGRIGrilleBase = new unsigned int * [uiGRITaille];
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle) {
 		ppuiGRIGrille[uiBoucle] = new unsigned int [uiGRITaille];
-		ppuiGRIGrilleBase[uiBoucle] = new unsigned int [uiGRITaille];
 	}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2) {
 			ppuiGRIGrille[uiBoucle][uiBoucle2] = uiUneGrille[uiBoucle][uiBoucle2];
-			ppuiGRIGrilleBase[uiBoucle][uiBoucle2] = ppuiGRIGrille[uiBoucle][uiBoucle2];
 		}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2)
 			if ((ppuiGRIGrille[uiBoucle][uiBoucle2] > 9) || (ppuiGRIGrille[uiBoucle][uiBoucle2] < 1)) {
 				ppuiGRIGrille[uiBoucle][uiBoucle2] = 0;
-				ppuiGRIGrilleBase[uiBoucle][uiBoucle2] = 0;
 			}
 }
 
@@ -68,33 +60,16 @@ CGrille::~CGrille(void) {
 	
 }
 
-void CGrille::GRIReinitialiserGrille() {
-	unsigned int uiBoucle;
-	unsigned int uiBoucle2;
-
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
-		for (uiBoucle2 = 0; uiBoucle2 <uiGRITaille; ++uiBoucle2)
-			ppuiGRIGrille[uiBoucle][uiBoucle2] = ppuiGRIGrilleBase[uiBoucle][uiBoucle2];
+unsigned int CGrille::GRILireTaille() {
+	return uiGRITaille;
 }
 
-bool CGrille::GRIVerifierLigne(unsigned int uiNo, unsigned int uiNoLigne) {
-	unsigned int uiBoucle;
-
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
-		if (ppuiGRIGrille[uiNoLigne][uiBoucle] == uiNo)
-			return false;
-
-	return true;
+unsigned int CGrille::GRILireValeur(unsigned int uiLigne, unsigned int uiColonne) {
+	return ppuiGRIGrille[uiLigne][uiColonne];
 }
 
-bool CGrille::GRIVerifierColonne(unsigned int uiNo, unsigned int uiNoColonne) {
-	unsigned int uiBoucle;
-
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
-		if (ppuiGRIGrille[uiBoucle][uiNoColonne] == uiNo)
-			return false;
-
-	return true;
+void CGrille::GRIModifierValeur(unsigned int uiLigne, unsigned int uiColonne, unsigned int uiValeur) {
+	ppuiGRIGrille[uiLigne][uiColonne] = uiValeur;
 }
 
 unsigned int CGrille::GRIRecupererZone(unsigned int uiLigne, unsigned int uiColonne) {
@@ -130,77 +105,6 @@ unsigned int CGrille::GRIRecupererZone(unsigned int uiLigne, unsigned int uiColo
 			}
 		}
 	}
-}
-
-bool CGrille::GRIVerifierZone(unsigned int uiNo, unsigned int uiNoZone) {
-	unsigned int uiBoucle;
-	unsigned int uiBoucle2;
-
-	switch (uiNoZone) {
-		case 1 :
-			for (uiBoucle = 0; uiBoucle < 3; ++uiBoucle)
-				for (uiBoucle2 = 0; uiBoucle2 < 3; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 2 :
-			for (uiBoucle = 3; uiBoucle < 6; ++uiBoucle)
-				for (uiBoucle2 = 0; uiBoucle2 < 3; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 3 :
-			for (uiBoucle = 6; uiBoucle < 9; ++uiBoucle)
-				for (uiBoucle2 = 0; uiBoucle2 < 3; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 4 :
-			for (uiBoucle = 0; uiBoucle < 3; ++uiBoucle)
-				for (uiBoucle2 = 3; uiBoucle2 < 6; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 5 :
-			for (uiBoucle = 3; uiBoucle < 6; ++uiBoucle)
-				for (uiBoucle2 = 3; uiBoucle2 < 6; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 6 :
-			for (uiBoucle = 6; uiBoucle < 9; ++uiBoucle)
-				for (uiBoucle2 = 3; uiBoucle2 < 6; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 7 :
-			for (uiBoucle = 0; uiBoucle < 3; ++uiBoucle)
-				for (uiBoucle2 = 6; uiBoucle2 < 9; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 8 :
-			for (uiBoucle = 3; uiBoucle < 6; ++uiBoucle)
-				for (uiBoucle2 = 6; uiBoucle2 < 9; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-		case 9 :
-			for (uiBoucle = 6; uiBoucle < 9; ++uiBoucle)
-				for (uiBoucle2 = 6; uiBoucle2 < 9; ++uiBoucle2)
-					if (ppuiGRIGrille[uiBoucle][uiBoucle2] == uiNo)
-						return false;
-			break;
-	}
-	return true;
-}
-
-void CGrille::GRIInsererNo(unsigned int uiNo, unsigned int uiLigne, unsigned int uiColonne) {
-	ppuiGRIGrille[uiLigne][uiColonne] = uiNo;
-}
-
-void CGrille::GRISupprimerNo(unsigned int uiNo, unsigned int uiLigne, unsigned int uiColonne) {
-	ppuiGRIGrille[uiLigne][uiColonne] = 0;
 }
 
 void CGrille::GRIAfficherGrille() {

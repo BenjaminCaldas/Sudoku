@@ -1,10 +1,11 @@
 #pragma once
 
-#include "Sudoku.h"
+#include "Grille.h"
 
 class CSolveur
 {
 	private :
+		CGrille * pGRIGrille;
 		long unsigned int luiSLVTempsResolution;
 		long unsigned int luiSLVNbNumerosTestes;
 		unsigned int uiSLVPourcentageResolution;
@@ -12,7 +13,7 @@ class CSolveur
 	public:
 		CSolveur();
 		CSolveur(CSolveur & SLVUnSolveur);
-		~CSolveur();
-		void SLVResoudre(CGrille GRISudoku);
+		CSolveur(CGrille * GRIUneGrille);
+		void SLVResoudre();
 };
 

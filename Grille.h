@@ -12,15 +12,12 @@ class CGrille
 		~CGrille();
 
 		unsigned int GRILireTaille();
-		unsigned int GRILireValeur();
+		unsigned int GRILireValeur(unsigned int uiLigne, unsigned int uiColonne);
 		void GRIModifierValeur(unsigned int uiLigne, unsigned int uiColonne, unsigned int uiValeur);
 
-		void GRIReinitialiserGrille();
 		unsigned int GRIRecupererZone(unsigned int uiLigne, unsigned int uiColonne);
 		
 		void GRIAfficherGrille();
-
-		//Surcharge opérateur ?
 
 };
 

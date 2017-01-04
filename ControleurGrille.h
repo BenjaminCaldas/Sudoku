@@ -3,17 +3,18 @@
 
 class CControleurGrille
 {
-public:
+	private :
+		CGrille * pGRIGrille;
 
-	CGrille * pGRIGrille;
-
-	CControleurGrille(void);
-	~CControleurGrille(void);
+	public :
+		CControleurGrille();
+		CControleurGrille(CControleurGrille & CGRUnControleur);
+		CControleurGrille(CGrille * GRIUneGrille);
 	
-	bool CGRVerifierLigne(unsigned int uiNo, unsigned int uiNoLigne);
-	bool CGRVerifierColonne(unsigned int uiNo, unsigned int uiNoColonne);
-	bool CGRVerifierZone(unsigned int uiNo, unsigned int * piZone);
+		bool CGRVerifierLigne(unsigned int uiNo, unsigned int uiNoLigne);
+		bool CGRVerifierColonne(unsigned int uiNo, unsigned int uiNoColonne);
+		bool CGRVerifierZone(unsigned int uiNo, unsigned int uiNoZone);
 
-	void CGRModifierCase(unsigned int uiLigne, unsigned int uiColonne, unsigned int uiValeur);
+		void CGRModifierCase(unsigned int uiLigne, unsigned int uiColonne, unsigned int uiValeur);
 };
 

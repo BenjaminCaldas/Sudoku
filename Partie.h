@@ -1,18 +1,19 @@
 #pragma once
 #include "Grille.h"
 
-class CPartie
-{
-public:
+class CPartie {
 
-	CGrille * pGRIGrille;
-	CGrille * pGRIGrilleOrigine;
+	private :
+		CGrille * pGRIGrille;
+		CGrille * pGRIGrilleOrigine;
 
-	void PARChargerPartie();
-	void PARSauvegarderPartie();
-	void PARInitialiserGrille();
+	public:
+		CPartie();
+		CPartie(CPartie & PARUnePartie);
+		CPartie(CGrille * pGRIUneGrille);
 
-	CPartie(void);
-	~CPartie(void);
+		void PARChargerPartie();
+		void PARSauvegarderPartie();
+		void PARReinitialiserGrille();
 };
 
