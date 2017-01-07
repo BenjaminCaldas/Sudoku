@@ -20,7 +20,7 @@ CGrille::CGrille(CGrille & GRIUnSudoku) {
 	}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2) {
-			ppuiGRIGrille[uiBoucle][uiBoucle2] = GRIUnSudoku.ppuiGRIGrille[uiBoucle][uiBoucle2];
+			ppuiGRIGrille[uiBoucle][uiBoucle2] = GRIUnSudoku.GRILireValeur(uiBoucle, uiBoucle2);
 		}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2)
@@ -111,14 +111,21 @@ void CGrille::GRIAfficherGrille() {
 	unsigned int uiBoucle;
 	unsigned int uiBoucle2;
 
+	cout << endl;
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle) {
+		if (uiBoucle == 3 || uiBoucle == 6)
+			cout << "----------------------------" << endl;
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2) {
 			cout << ppuiGRIGrille[uiBoucle][uiBoucle2];
 			if (uiBoucle2 != uiGRITaille - 1)
-				cout << " | ";
+				cout << " ";
+			if (uiBoucle2 == 2 || uiBoucle2 == 5)
+				cout << "|";
+			if (uiBoucle2 != uiGRITaille - 1)
+				cout << " ";
 		}
-		cout << endl;
 		if (uiBoucle != uiGRITaille - 1)
 			cout << endl;
 	}
+	cout << endl;
 }

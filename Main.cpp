@@ -4,6 +4,7 @@
 #include "Grille.h"
 #include "ControleurGrille.h"
 #include "Solveur.h"
+#include "Partie.h"
 
 using namespace std;
 
@@ -27,8 +28,11 @@ int main (unsigned int argc, char * argv[])
 	
 	CGrille GRIGrille1(ppuiGrille, 9);
 
-	CSolveur SLVSolveur1(&GRIGrille1);
-	SLVSolveur1.SLVResoudre();
+	/*CSolveur SLVSolveur1(&GRIGrille1);
+	SLVSolveur1.SLVResoudre();*/
+
+	CPartie PARPartie1(&GRIGrille1);
+	PARPartie1.PARJouer();
 
 	int a;
 	cin >> a;
