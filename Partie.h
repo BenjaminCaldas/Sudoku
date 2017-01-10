@@ -17,6 +17,7 @@ class CPartie {
 		CPartie();
 		CPartie(CPartie & PARUnePartie);
 		CPartie(CGrille * pGRIUneGrille, std::string sNomJoueur);
+		CPartie(CGrille * pGRIUneGrille, CGrille * pGRIUneGrilleOrigine, unsigned int uiUneTaille, std::string sNomJoueur, unsigned int uiLesCasesRemplies, unsigned int uiUnNbCoups, bool bUnStatut);
 		~CPartie();
 
 		// Fonctions nécessaires à une partie

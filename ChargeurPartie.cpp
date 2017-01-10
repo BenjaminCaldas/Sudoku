@@ -102,7 +102,7 @@ void CChargeurPartie::CHPChargerPartie() {
 		cin >> uiNumFichier;
 		cin.clear();
 		cout << "Vous avez choisit de generer la partie : " << psParties[uiNumFichier - 1] << endl;
-		// Generer la partie a l'aide du parseur
+		CHPLireFichier("./Parties/" + psParties[uiNumFichier - 1]);
 	}
 	else {
 		cout << endl << "Aucune partie sauvegardee !" << endl << endl;
@@ -110,7 +110,47 @@ void CChargeurPartie::CHPChargerPartie() {
 	}
 }
 
-// Utile ?
-CPartie * CChargeurPartie::CHPLireFichier(char * pcChemin) {
-	return NULL;
+CPartie * CChargeurPartie::CHPLireFichier(string sChemin) {
+	CParseur PARParseur(sChemin);
+	string sProprietes[NB_LIGNES];
+
+	for (unsigned int uiNbLigne = 0; uiNbLigne < NB_LIGNES; ++uiNbLigne) {
+		PARParseur.PARLireLigne();
+		sProprietes[uiNbLigne] = PARParseur.PARLireValeur();
+	}
+
+	// On convertie les attributs dans le bon type afin de creer un objet Partie
+	string sNomJoueur = sProprietes[0];
+	unsigned int uiCasesRemplies = stoul(sProprietes[1], nullptr, 0);
+	unsigned int uiNbCoups = stoul(sProprietes[2], nullptr, 0);
+	unsigned int uiTailleGrille = stoul(sProprietes[3], nullptr, 0);
+	bool bStatut = 1;
+	if (sProprietes[4] == "En_Cours")
+		bStatut = 0;
+
+	// Recuperation des grilles
+	unsigned int uiBoucle;
+	unsigned int uiBoucle2;
+	unsigned int uiNumCaractere = 0;
+	unsigned int ** ppuiGrilleOrigine = new unsigned int * [uiTailleGrille];
+	unsigned int ** ppuiGrille = new unsigned int * [uiTailleGrille];
+
+	for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle) {
+		ppuiGrilleOrigine[uiBoucle] = new unsigned int [uiTailleGrille];
+		ppuiGrille[uiBoucle] = new unsigned int [uiTailleGrille];
+	}
+
+	for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
+		for (uiBoucle2 = 0; uiBoucle2 < uiTailleGrille; ++uiBoucle2) {
+			ppuiGrilleOrigine[uiBoucle][uiBoucle2] = sProprietes[5][uiNumCaractere] - '0';
+			ppuiGrille[uiBoucle][uiBoucle2] = sProprietes[6][uiNumCaractere] - '0';
+			++uiNumCaractere;
+		}
+
+	// Creation de l'objet Partie
+	CGrille GRIGrille(ppuiGrille, uiTailleGrille);
+	CGrille GRIGrilleOrigine(ppuiGrilleOrigine, uiTailleGrille);
+	CPartie * PARPartie = new CPartie(&GRIGrille, &GRIGrilleOrigine, uiTailleGrille, sNomJoueur, uiCasesRemplies, uiNbCoups, bStatut);
+
+	return PARPartie;
 }

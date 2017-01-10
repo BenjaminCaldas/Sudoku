@@ -36,6 +36,16 @@ CPartie::CPartie(CGrille * pGRIUneGrille, string sNomJoueur) {
 	bPARStatut = 0;
 }
 
+CPartie::CPartie(CGrille * pGRIUneGrille, CGrille * pGRIUneGrilleOrigine, unsigned int uiUneTaille, string sNomJoueur, unsigned int uiLesCasesRemplies, unsigned int uiUnNbCoups, bool bUnStatut) {
+	pGRIGrille = new CGrille(*pGRIUneGrille);
+	pGRIGrilleOrigine = new CGrille(*pGRIUneGrilleOrigine);
+	uiPARTaille = uiUneTaille;
+	sPARNomJoueur = sNomJoueur;
+	uiPARCasesRemplies = uiLesCasesRemplies;
+	uiPARNbCoups = uiUnNbCoups;
+	bPARStatut = bUnStatut;
+}
+
 CPartie::~CPartie() {
 	delete pGRIGrille;
 	delete pGRIGrilleOrigine;
@@ -253,6 +263,12 @@ void CPartie::PARSauvegarderPartie() {
 		oFichier << "Cases_Remplies=" << uiPARCasesRemplies << endl;
 		oFichier << "Nb_Coups=" << uiPARNbCoups << endl;
 		oFichier << "Taille_Grille=" << uiPARTaille << endl;
+		oFichier << "Statut=";
+		if (bPARStatut == 0)
+			oFichier << "En_Cours";
+		else
+			oFichier << "Resolue";
+		oFichier << endl;
 
 		unsigned int uiBoucle;
 		unsigned int uiBoucle2;
@@ -267,11 +283,7 @@ void CPartie::PARSauvegarderPartie() {
 			for (uiBoucle2 = 0; uiBoucle2 < uiPARTaille; ++uiBoucle2)
 				oFichier << pGRIGrille->GRILireValeur(uiBoucle, uiBoucle2);
 		oFichier << endl;
-		oFichier << "Statut=";
-		if (bPARStatut == 0)
-			oFichier << "En_Cours";
-		else
-			oFichier << "Resolue";
+		
 		cout << sNomFichier << " a ete sauvegarde ! " << endl;
 	}
 	else {
