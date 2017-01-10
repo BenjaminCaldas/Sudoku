@@ -1,10 +1,13 @@
 #include <stdlib.h>
 #include <iostream>
+#include <cstdlib>
+#include <string>
 
 #include "Grille.h"
 #include "ControleurGrille.h"
 #include "Solveur.h"
 #include "Partie.h"
+#include "ChargeurPartie.h"
 
 using namespace std;
 
@@ -31,9 +34,16 @@ int main (unsigned int argc, char * argv[])
 	/*CSolveur SLVSolveur1(&GRIGrille1);
 	SLVSolveur1.SLVResoudre();*/
 
-	CPartie PARPartie1(&GRIGrille1);
-	PARPartie1.PARJouer();
-
+	CChargeurPartie CHPChargeurPartie1;
+	CHPChargeurPartie1.CHPMenuPrincipal();
+	if (CHPChargeurPartie1.CHPRecupererEtatPartie() == 1) {
+		// Nouvelle partie
+		CPartie PARPartie1(&GRIGrille1, CHPChargeurPartie1.CHPRecupererNomJoueur());
+		PARPartie1.PARJouer();
+	}
+	else {
+		// Charger la partie
+	}
 	int a;
 	cin >> a;
 }

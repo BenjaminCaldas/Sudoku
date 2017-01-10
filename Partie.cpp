@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <windows.h>
+#include <fstream>
 #include <iostream>
+#include <string>
 
 #include "Partie.h"
 #include "ControleurGrille.h"
@@ -10,24 +12,33 @@ using namespace std;
 
 CPartie::CPartie() {
 	pGRIGrille = pGRIGrilleOrigine = NULL;
-	uiGRITaille = 0;
-	uiGRICasesRemplies = uiGRINbCoups = 0;
+	uiPARTaille = 0;
+	uiPARCasesRemplies = uiPARNbCoups = 0;
+	bPARStatut = 0;
 }
 
 CPartie::CPartie(CPartie & PARUnePartie) {
 	pGRIGrille = new CGrille(*PARUnePartie.pGRIGrille);
 	pGRIGrilleOrigine = new CGrille(*PARUnePartie.pGRIGrilleOrigine);
-	uiGRITaille = PARUnePartie.uiGRITaille;
-	uiGRICasesRemplies = PARUnePartie.uiGRICasesRemplies;
-	uiGRINbCoups = 0;
+	uiPARTaille = PARUnePartie.uiPARTaille;
+	uiPARCasesRemplies = PARUnePartie.uiPARCasesRemplies;
+	uiPARNbCoups = 0;
+	bPARStatut = 0;
 }
 
-CPartie::CPartie(CGrille * pGRIUneGrille) {
+CPartie::CPartie(CGrille * pGRIUneGrille, string sNomJoueur) {
 	pGRIGrille = new CGrille(*pGRIUneGrille);
 	pGRIGrilleOrigine = new CGrille(*pGRIUneGrille);
-	uiGRITaille = pGRIUneGrille->GRILireTaille();
-	uiGRICasesRemplies = PARCompterCasesOrigine();
-	uiGRINbCoups = 0;
+	uiPARTaille = pGRIUneGrille->GRILireTaille();
+	sPARNomJoueur = sNomJoueur;
+	uiPARCasesRemplies = PARCompterCasesOrigine();
+	uiPARNbCoups = 0;
+	bPARStatut = 0;
+}
+
+CPartie::~CPartie() {
+	delete pGRIGrille;
+	delete pGRIGrilleOrigine;
 }
 
 unsigned int * CPartie::PARDemanderCoordonnees() {
@@ -39,13 +50,15 @@ unsigned int * CPartie::PARDemanderCoordonnees() {
 	while (bContinuerX == 0 || bContinuerY == 0) {
 		cout << "Ligne : ";
 		cin >> uiCoord[0];
+		cin.ignore();
 		uiCoord[0] -= 1;
-		if (uiCoord[0] >= 0 && uiCoord[0] < uiGRITaille) 
+		if (uiCoord[0] >= 0 && uiCoord[0] < uiPARTaille) 
 			bContinuerX = 1;
 		cout << "Colonne : ";
 		cin >> uiCoord[1];
+		cin.ignore();
 		uiCoord[1] -= 1;
-		if (uiCoord[1] >= 0 && uiCoord[1] < uiGRITaille) 
+		if (uiCoord[1] >= 0 && uiCoord[1] < uiPARTaille) 
 			bContinuerY = 1;
 		if (bContinuerX != 0 && bContinuerY != 0) {
 			if (PARVerifierCoordonneesGrilleOrigine(uiCoord[0], uiCoord[1]) == 0) {
@@ -67,7 +80,7 @@ unsigned int CPartie::PARDemanderValeur() {
 	while (bContinuer == 0) {
 	cout << "Valeur a ajouter : ";
 	cin >> uiValeur;
-	if (uiValeur > 0 && uiValeur <= uiGRITaille)
+	if (uiValeur > 0 && uiValeur <= uiPARTaille)
 		bContinuer = 1;
 	else
 		cout << "Erreur, veuillez recommencer !" << endl << endl;
@@ -83,7 +96,7 @@ bool CPartie::PARVerifierCoordonneesGrilleOrigine(unsigned int uiLigne, unsigned
 }
 
 bool CPartie::PARVerifierAvancement() {
-	if (uiGRICasesRemplies == uiGRITaille * uiGRITaille)
+	if (uiPARCasesRemplies == uiPARTaille * uiPARTaille)
 		return false;
 	return true;
 }
@@ -92,89 +105,12 @@ void CPartie::PARReinitialiserGrille() {
 	unsigned int uiBoucle;
 	unsigned int uiBoucle2;
 
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
-		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2)
+	for (uiBoucle = 0; uiBoucle < uiPARTaille; ++uiBoucle)
+		for (uiBoucle2 = 0; uiBoucle2 < uiPARTaille; ++uiBoucle2)
 			pGRIGrille->GRIModifierValeur(uiBoucle, uiBoucle2, pGRIGrilleOrigine->GRILireValeur(uiBoucle, uiBoucle2));
-}
 
-void CPartie::PARAfficherStatistiques() {
-	cout << endl;
-	cout << "Voici les statistiques de la partie en cours :" << endl;
-	cout << "Cases remplies : " << uiGRICasesRemplies << "/" << uiGRITaille * uiGRITaille << endl;
-	cout << "Nombre de coups : " << uiGRINbCoups << endl;
-	cout << endl;
-}
-
-unsigned int CPartie::PARCompterCasesOrigine() {
-	unsigned int uiBoucle;
-	unsigned int uiBoucle2;
-	unsigned int uiNb = 0;
-
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
-		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2)
-			if (pGRIGrilleOrigine->GRILireValeur(uiBoucle, uiBoucle2) != 0)
-				++uiNb;
-	return uiNb;
-}
-
-void CPartie::PARJouer() {
-	bool bContinuer = 1;
-	unsigned int uiChoix = 1;
-	
-	cout << "Bienvenue sur notre jeu du Sudoku" << endl << "Vous allez jouer une partie" << endl;
-	cout << endl << "Voici votre grille de jeu :" << endl;
-	PARAfficherGrilleAvecCouleurs();
-	cout << endl;
-	while (uiChoix == 1 && bContinuer == 1) {
-		cout << endl << "Que souhaitez-vous faire ?" << endl;
-		cout << "1 : Placer un numero sur la grille" << endl;
-		cout << "2 : Reinitialiser la grille" << endl;
-		cout << "3 : Afficher les statistiques de la partie" << endl;
-		cin >> uiChoix;
-		if (uiChoix == 2) {
-			PARReinitialiserGrille();
-			cout << "La grille a ete reinitialisee !" << endl << endl;
-			PARAfficherGrilleAvecCouleurs();
-			cout << endl;
-			uiChoix = 1;
-		}
-		else {
-			if (uiChoix == 3)
-				PARAfficherStatistiques();
-			uiChoix = 1;
-		}
-		unsigned int * uiCoord = PARDemanderCoordonnees();
-		unsigned int uiLigne = uiCoord[0];
-		unsigned int uiColonne = uiCoord[1];
-		cout << "Vous avez choisit les coordonnees (" << uiLigne + 1 << ", " << uiColonne + 1 << ")";
-		cout << ", contenant la valeur : " << pGRIGrille->GRILireValeur(uiLigne, uiColonne) << "." << endl;
-		CControleurGrille CGRControleur1(pGRIGrille);
-		unsigned int uiValeur = PARDemanderValeur();
-		cout << "Vous souhaitez inserer la valeur " << uiValeur << endl;
-		if (CGRControleur1.CGRModifierCase(uiLigne, uiColonne, uiValeur) == 1) {
-			pGRIGrille->GRIModifierValeur(uiLigne, uiColonne, uiValeur);
-			++uiGRICasesRemplies;
-			++uiGRINbCoups;
-			cout << "Voici la nouvelle grille de jeu apres insertion de la valeur " << uiValeur;
-			cout << " aux cordonnees (" << uiLigne + 1 << ", " << uiColonne + 1 << ")." << endl;
-			PARAfficherGrilleAvecCouleurs();
-			cout << endl;
-			bContinuer = PARVerifierAvancement();
-		}
-		else {
-			cout << "Vous defiez les regles du Sudoku !" << endl;
-			cout<< "Impossible d'ajouter la valeur !" << endl;
-		}
-	}
-	cout << endl << "Bravo, la grille a ete resolue !" << endl;
-}
-
-void CPartie::PARChargerPartie() {
-
-}
-
-void CPartie::PARSauvegarderPartie() {
-
+	uiPARCasesRemplies = PARCompterCasesOrigine();
+	uiPARNbCoups = 0;
 }
 
 void CPartie::PARAfficherGrilleAvecCouleurs() {
@@ -186,10 +122,10 @@ void CPartie::PARAfficherGrilleAvecCouleurs() {
 	int iCouleur;
 
 	cout << endl;
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle) {
+	for (uiBoucle = 0; uiBoucle < uiPARTaille; ++uiBoucle) {
 		if (uiBoucle == 3 || uiBoucle == 6)
 			cout << "----------------------------" << endl;
-		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2) {
+		for (uiBoucle2 = 0; uiBoucle2 < uiPARTaille; ++uiBoucle2) {
 			if (pGRIGrille->GRILireValeur(uiBoucle, uiBoucle2) == pGRIGrilleOrigine->GRILireValeur(uiBoucle, uiBoucle2) && pGRIGrille->GRILireValeur(uiBoucle, uiBoucle2)) {
 				iCouleur = 12;
 				SetConsoleTextAttribute(hConsole, iCouleur);
@@ -197,15 +133,149 @@ void CPartie::PARAfficherGrilleAvecCouleurs() {
 			cout << pGRIGrille->GRILireValeur(uiBoucle, uiBoucle2);
 			iCouleur = 7;
 			SetConsoleTextAttribute(hConsole, iCouleur);
-			if (uiBoucle2 != uiGRITaille - 1)
+			if (uiBoucle2 != uiPARTaille - 1)
 				cout << " ";
 			if (uiBoucle2 == 2 || uiBoucle2 == 5)
 				cout << "|";
-			if (uiBoucle2 != uiGRITaille - 1)
+			if (uiBoucle2 != uiPARTaille - 1)
 				cout << " ";
 		}
-		if (uiBoucle != uiGRITaille - 1)
+		if (uiBoucle != uiPARTaille - 1)
 			cout << endl;
 	}
 	cout << endl;
+}
+
+void CPartie::PARAfficherStatistiques() {
+	cout << endl;
+	cout << "Voici les statistiques de la partie en cours :" << endl;
+	cout << "Cases remplies : " << uiPARCasesRemplies << "/" << uiPARTaille * uiPARTaille << endl;
+	cout << "Nombre de coups : " << uiPARNbCoups << endl;
+	cout << endl;
+}
+
+unsigned int CPartie::PARCompterCasesOrigine() {
+	unsigned int uiBoucle;
+	unsigned int uiBoucle2;
+	unsigned int uiNb = 0;
+
+	for (uiBoucle = 0; uiBoucle < uiPARTaille; ++uiBoucle)
+		for (uiBoucle2 = 0; uiBoucle2 < uiPARTaille; ++uiBoucle2)
+			if (pGRIGrilleOrigine->GRILireValeur(uiBoucle, uiBoucle2) != 0)
+				++uiNb;
+	return uiNb;
+}
+
+void CPartie::PARJouer() {
+	bool bContinuer = 1;
+	unsigned int uiChoix = 0;
+	
+	cout << endl << "Bonjour " << sPARNomJoueur << ", vous allez jouer une partie" << endl;
+	cout << endl << "Voici votre grille de jeu :" << endl;
+	PARAfficherGrilleAvecCouleurs();
+	cout << endl;
+	while (uiChoix == 0 && bContinuer == 1) {
+		cout << endl << "Que souhaitez-vous faire ?" << endl;
+		cout << "1 : Placer un numero sur la grille" << endl;
+		cout << "2 : Reinitialiser la grille" << endl;
+		cout << "3 : Afficher les statistiques de la partie" << endl;
+		cout << "4 : Afficher la grille" << endl;
+		cout << "5 : Sauvegarder la partie" << endl;
+		cout << "6 : Quitter le jeu" << endl;
+		cin >> uiChoix;
+		cin.clear();
+		// Bug si l'on rentre un ou plusieurs caractères
+		if (uiChoix == 1) {
+			unsigned int * uiCoord = PARDemanderCoordonnees();
+			unsigned int uiLigne = uiCoord[0];
+			unsigned int uiColonne = uiCoord[1];
+			cout << "Vous avez choisit les coordonnees (" << uiLigne + 1 << ", " << uiColonne + 1 << ")";
+			cout << ", contenant la valeur : " << pGRIGrille->GRILireValeur(uiLigne, uiColonne) << "." << endl;
+			CControleurGrille CGRControleur1(pGRIGrille);
+			unsigned int uiValeur = PARDemanderValeur();
+			cout << "Vous souhaitez inserer la valeur " << uiValeur << endl;
+			if (CGRControleur1.CGRModifierCase(uiLigne, uiColonne, uiValeur) == 1) {
+				pGRIGrille->GRIModifierValeur(uiLigne, uiColonne, uiValeur);
+				++uiPARCasesRemplies;
+				++uiPARNbCoups;
+				cout << "Voici la nouvelle grille de jeu apres insertion de la valeur " << uiValeur;
+				cout << " aux cordonnees (" << uiLigne + 1 << ", " << uiColonne + 1 << ")." << endl;
+				PARAfficherGrilleAvecCouleurs();
+				cout << endl;
+				bContinuer = PARVerifierAvancement();
+			}
+			else {
+				cout << "Vous defiez les regles du Sudoku !" << endl;
+				cout<< "Impossible d'ajouter la valeur !" << endl;
+			}
+		}
+		else {
+			if (uiChoix == 2) {
+				PARReinitialiserGrille();
+				cout << "La grille a ete reinitialisee !" << endl << endl;
+				PARAfficherGrilleAvecCouleurs();
+				cout << endl;
+				uiChoix = 0;
+			}
+			else {
+				if (uiChoix == 3)
+					PARAfficherStatistiques();
+				if (uiChoix == 4) {
+					PARAfficherGrilleAvecCouleurs();
+					cout << endl;
+				}
+				if (uiChoix == 5)
+					PARSauvegarderPartie();
+				if (uiChoix == 6) {
+					cout << endl << "A BIENTOT !" << endl;
+					break;
+				}
+				uiChoix = 0;
+			}
+		}
+	}
+	if (PARVerifierAvancement() == 0) {
+		cout << endl << "Bravo, la grille a ete resolue !" << endl;
+		bPARStatut = 1;
+	}
+}
+
+void CPartie::PARChargerPartie() {
+	// Utile ?
+}
+
+void CPartie::PARSauvegarderPartie() {
+	string sNomFichier = "./Parties/" + sPARNomJoueur + ".txt";
+	ofstream oFichier(sNomFichier.c_str());
+
+	if (oFichier) {
+		oFichier << "Nom_Joueur=" << sPARNomJoueur << endl;
+		oFichier << "Cases_Remplies=" << uiPARCasesRemplies << endl;
+		oFichier << "Nb_Coups=" << uiPARNbCoups << endl;
+		oFichier << "Taille_Grille=" << uiPARTaille << endl;
+
+		unsigned int uiBoucle;
+		unsigned int uiBoucle2;
+
+		oFichier << "Grille_Origine=";
+		for (uiBoucle = 0; uiBoucle < uiPARTaille; ++ uiBoucle)
+			for (uiBoucle2 = 0; uiBoucle2 < uiPARTaille; ++uiBoucle2)
+				oFichier<< pGRIGrilleOrigine->GRILireValeur(uiBoucle, uiBoucle2);
+		oFichier << endl;
+		oFichier << "Grille=";
+		for (uiBoucle = 0; uiBoucle < uiPARTaille; ++ uiBoucle)
+			for (uiBoucle2 = 0; uiBoucle2 < uiPARTaille; ++uiBoucle2)
+				oFichier << pGRIGrille->GRILireValeur(uiBoucle, uiBoucle2);
+		oFichier << endl;
+		oFichier << "Statut=";
+		if (bPARStatut == 0)
+			oFichier << "En_Cours";
+		else
+			oFichier << "Resolue";
+		cout << sNomFichier << " a ete sauvegarde ! " << endl;
+	}
+	else {
+		// Lever Exception
+		cout << "Erreur d'ouverture !" << endl;
+	}
 }
