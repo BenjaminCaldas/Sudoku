@@ -218,6 +218,7 @@ void CPartie::PARJouer() {
 				cout << "Vous defiez les regles du Sudoku !" << endl;
 				cout<< "Impossible d'ajouter la valeur !" << endl;
 			}
+			uiChoix = 0;
 		}
 		else {
 			if (uiChoix == 2) {
