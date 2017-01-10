@@ -35,15 +35,8 @@ int main (unsigned int argc, char * argv[])
 	SLVSolveur1.SLVResoudre();*/
 
 	CChargeurPartie CHPChargeurPartie1;
-	CHPChargeurPartie1.CHPMenuPrincipal();
-	if (CHPChargeurPartie1.CHPRecupererEtatPartie() == 1) {
-		// Nouvelle partie
-		CPartie PARPartie1(&GRIGrille1, CHPChargeurPartie1.CHPRecupererNomJoueur());
-		PARPartie1.PARJouer();
-	}
-	else {
-		// Charger la partie
-	}
+	CPartie * PARPartie = CHPChargeurPartie1.CHPMenuPrincipal();
+	PARPartie->PARJouer();
 	int a;
 	cin >> a;
 }

@@ -36,7 +36,6 @@ class CPartie {
 		void PARJouer();
 		
 		// Gestion des parties
-		void PARChargerPartie(); // Utile ?
 		void PARSauvegarderPartie();
 
 		

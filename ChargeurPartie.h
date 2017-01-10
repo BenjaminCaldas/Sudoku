@@ -5,7 +5,8 @@
 #include "Partie.h"
 #include "Parseur.h"
 
-#define NB_LIGNES 7
+#define NB_LIGNES_PARTIE 7
+#define NB_LIGNES_GRILLE 3
 
 class CChargeurPartie
 {
@@ -18,10 +19,10 @@ class CChargeurPartie
 
 		std::string CHPRecupererNomJoueur();
 		bool CHPRecupererEtatPartie();
-		void CHPMenuPrincipal();
-		void CHPNouvellePartie(); // Doit renvoyer un objet Partie
+		CPartie * CHPMenuPrincipal();
+		CPartie * CHPNouvellePartie();
 		unsigned int CHPCompterNombreFichiers(DIR * dUnRepertoire);
-		void CHPChargerPartie();
+		CPartie * CHPChargerPartie();
 		CPartie * CHPLireFichier(std::string sChemin);
 };
 
