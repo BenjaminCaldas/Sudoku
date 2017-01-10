@@ -1,14 +1,4 @@
-#include <stdlib.h>
-#include <windows.h>
-#include <fstream>
-#include <iostream>
-#include <string>
-
 #include "Partie.h"
-#include "ControleurGrille.h"
-#include "Grille.h"
-
-using namespace std;
 
 CPartie::CPartie() {
 	pGRIGrille = pGRIGrilleOrigine = NULL;
@@ -185,13 +175,16 @@ void CPartie::PARJouer() {
 	PARAfficherGrilleAvecCouleurs();
 	cout << endl;
 	while (uiChoix == 0 && bContinuer == 1) {
-		cout << endl << "Que souhaitez-vous faire ?" << endl;
-		cout << "1 : Placer un numero sur la grille" << endl;
-		cout << "2 : Reinitialiser la grille" << endl;
-		cout << "3 : Afficher les statistiques de la partie" << endl;
-		cout << "4 : Afficher la grille" << endl;
-		cout << "5 : Sauvegarder la partie" << endl;
-		cout << "6 : Quitter le jeu" << endl;
+		if (bPARStatut != 1) {
+			cout << endl << "Que souhaitez-vous faire ?" << endl;
+			cout << "1 : Placer un numero sur la grille" << endl;
+			cout << "2 : Reinitialiser la grille" << endl;
+			cout << "3 : Afficher les statistiques de la partie" << endl;
+			cout << "4 : Afficher la grille" << endl;
+			cout << "5 : Sauvegarder la partie" << endl;
+			cout << "6 : Lancer la resolution automatique" << endl;
+			cout << "7 : Quitter le jeu" << endl;
+		}
 		cin >> uiChoix;
 		cin.clear();
 		// Bug si l'on rentre un ou plusieurs caractères
@@ -238,6 +231,13 @@ void CPartie::PARJouer() {
 				if (uiChoix == 5)
 					PARSauvegarderPartie();
 				if (uiChoix == 6) {
+					CSolveur SLVSolveur(pGRIGrille);
+					SLVSolveur.SLVResoudre(0);
+					uiPARCasesRemplies = uiPARTaille * uiPARTaille;
+					uiPARNbCoups = 0;
+					bPARStatut = 1;
+				}
+				if (uiChoix == 7) {
 					cout << endl << "A BIENTOT !" << endl;
 					break;
 				}
@@ -246,7 +246,7 @@ void CPartie::PARJouer() {
 		}
 	}
 	if (PARVerifierAvancement() == 0) {
-		cout << endl << "Bravo, la grille a ete resolue !" << endl;
+		cout << "Bravo, la grille a ete resolue !" << endl;
 		bPARStatut = 1;
 	}
 }
