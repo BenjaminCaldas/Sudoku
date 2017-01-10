@@ -22,37 +22,30 @@ CSolveur::CSolveur(CGrille * GRIUneGrille) {
 	luiSLVTempsResolution = luiSLVNbNumerosTestes = uiSLVPourcentageResolution = 0;
 }
 
-void CSolveur::SLVResoudre() {
-	cout << "Grille de base : " << endl;
-	pGRIGrille->GRIAfficherGrille();
-	cout << endl;
+bool CSolveur::SLVResoudre(unsigned int uiPosition) {
+	CControleurGrille CGRControleur(pGRIGrille);
+	unsigned int uiTailleGrille = pGRIGrille->GRILireTaille();
 
-	unsigned int uiBoucle1;
-	unsigned int uiBoucle2;
-	unsigned int uiValeur;
-	unsigned int uiTaille = pGRIGrille->GRILireTaille();
+	if (uiPosition == uiTailleGrille * uiTailleGrille)
+		return true;
 
-	CControleurGrille CGRControleur1(pGRIGrille);
+	unsigned int uiLigne = uiPosition / 9;
+	unsigned int uiColonne = uiPosition % 9;
 
-	for (uiBoucle1 = 0; uiBoucle1 < uiTaille; ++uiBoucle1) {
-		for (uiBoucle2 = 0; uiBoucle2 < uiTaille; ++uiBoucle2) {
-			if (pGRIGrille->GRILireValeur(uiBoucle1, uiBoucle2) == 0) {
-				cout << "Ligne : " << uiBoucle1 << " | " << "Colonne : " << uiBoucle2 << endl;
-				for (uiValeur = 1; uiValeur <= uiTaille; ++uiValeur) {
-					cout << "Val : " << uiValeur;
-					cout << " L : " << CGRControleur1.CGRVerifierLigne(uiValeur, uiBoucle1);
-					cout << " C : " << CGRControleur1.CGRVerifierColonne(uiValeur, uiBoucle2);
-					cout << " Z" << pGRIGrille->GRIRecupererZone(uiBoucle1, uiBoucle2) << " : " << CGRControleur1.CGRVerifierZone(uiValeur, pGRIGrille->GRIRecupererZone(uiBoucle1, uiBoucle2)) << endl;
-					if ((CGRControleur1.CGRVerifierLigne(uiValeur, uiBoucle1)) &&
-					(CGRControleur1.CGRVerifierColonne(uiValeur, uiBoucle2)) &&
-					(CGRControleur1.CGRVerifierZone(uiValeur, pGRIGrille->GRIRecupererZone(uiBoucle1, uiBoucle2))))
-					pGRIGrille->GRIModifierValeur(uiBoucle1, uiBoucle2, uiValeur);
-				}
-				cout << endl;
-			}
+	if (pGRIGrille->GRILireValeur(uiLigne, uiColonne) != 0)
+		return SLVResoudre(uiPosition + 1);
+
+	unsigned int uiNumero;
+
+	for (uiNumero = 1; uiNumero <= uiTailleGrille; ++uiNumero) {
+		if (CGRControleur.CGRVerifierLigne(uiNumero, uiLigne) && CGRControleur.CGRVerifierColonne(uiNumero, uiColonne) && CGRControleur.CGRVerifierZone(uiNumero, pGRIGrille->GRIRecupererZone(uiLigne, uiColonne))) {
+			pGRIGrille->GRIModifierValeur(uiLigne, uiColonne, uiNumero);
+			pGRIGrille->GRIAfficherGrille();
+			if (SLVResoudre(uiPosition + 1))
+				return true;
 		}
 	}
+	pGRIGrille->GRIModifierValeur(uiLigne, uiColonne, 0);
 
-	cout << "Nouvelle grille : " << endl;
-	pGRIGrille->GRIAfficherGrille();
+	return false;
 }

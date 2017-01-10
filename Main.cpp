@@ -31,12 +31,18 @@ int main (unsigned int argc, char * argv[])
 	
 	CGrille GRIGrille1(ppuiGrille, 9);
 
-	/*CSolveur SLVSolveur1(&GRIGrille1);
-	SLVSolveur1.SLVResoudre();*/
+	cout << "Grille de base : " << endl;
+	GRIGrille1.GRIAfficherGrille();
+	cout << endl;
+	CSolveur SLVSolveur1(&GRIGrille1);
+	SLVSolveur1.SLVResoudre(0);
+	cout << "Nouvelle grille : " << endl;
+	GRIGrille1.GRIAfficherGrille();
 
-	CChargeurPartie CHPChargeurPartie1;
+	/*CChargeurPartie CHPChargeurPartie1;
 	CPartie * PARPartie = CHPChargeurPartie1.CHPMenuPrincipal();
-	PARPartie->PARJouer();
+	PARPartie->PARJouer();*/
+
 	int a;
 	cin >> a;
 }

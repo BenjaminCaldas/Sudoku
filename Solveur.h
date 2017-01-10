@@ -14,6 +14,6 @@ class CSolveur
 		CSolveur();
 		CSolveur(CSolveur & SLVUnSolveur);
 		CSolveur(CGrille * GRIUneGrille);
-		void SLVResoudre();
+		bool SLVResoudre(unsigned int uiPosition);
 };
 
