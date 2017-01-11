@@ -1,27 +1,20 @@
+/**
+* \file ChargeurPartie.cpp
+* \author Benjamin Caldas
+* \brief Le fichier source de la classe CChargeurPartie.
+*/
 #include "ChargeurPartie.h"
-#include "dirent.h"
-#include <stdio.h>
-#include <iostream>
-#include <string>
-#include <time.h>
-
-using namespace std;
 
 CChargeurPartie::CChargeurPartie(void) {
-	bCHPNouvellePartie = 1;
 }
 
-string CChargeurPartie::CHPRecupererNomJoueur() {
+string CChargeurPartie::CHPRecupererNomJoueur(void) {
 	return sCHPNomJoueur;
 }
 
-bool CChargeurPartie::CHPRecupererEtatPartie() {
-	return bCHPNouvellePartie;
-}
-
-CPartie * CChargeurPartie::CHPMenuPrincipal() {
-	CPartie * PARPartie = NULL;
+CPartie * CChargeurPartie::CHPMenuPrincipal(void) {
 	unsigned int uiChoice = 0;
+	CPartie * PARPartie = NULL;
 	string sNomJoueur;
 
 	cout << "Bienvenue sur notre jeu du Sudoku" << endl;
@@ -36,18 +29,17 @@ CPartie * CChargeurPartie::CHPMenuPrincipal() {
 				PARPartie = CHPNouvellePartie();
 				break;
 			case 2 :
-				bCHPNouvellePartie = 0;
 				PARPartie = CHPChargerPartie();
 				break;
 			default :
-				uiChoice = 0;
+				uiChoice = 0; // Tant que l'utilisateur n'a pas rentre 1 ou 2, on boucle
 				break;
 		}
 	}
 	return PARPartie;
 }
 
-CPartie * CChargeurPartie::CHPNouvellePartie() {
+CPartie * CChargeurPartie::CHPNouvellePartie(void) {
 	cout << "Quel est votre nom de joueur ?" << endl;
 	cin >> sCHPNomJoueur;
 	cout << sCHPNomJoueur;
@@ -101,13 +93,18 @@ CPartie * CChargeurPartie::CHPNouvellePartie() {
 	CGrille GRIGrille(ppuiGrille, uiTailleGrille);
 	CPartie * PARNouvellePartie = new CPartie(&GRIGrille, sCHPNomJoueur);
 
+	// On libere la memoire
+	for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
+		delete [] ppuiGrille[uiBoucle];
+	delete [] ppuiGrille; 
+
 	return PARNouvellePartie;
 }
 
 unsigned int CChargeurPartie::CHPCompterNombreFichiers(DIR * dUnRepertoire) {
 	unsigned int uiNbFichiers = 0;
 
-	// On compte le nombre de fichier présent dans le répertoire de sauvegarde de parties
+	// On compte le nombre de fichier prÃ©sent dans le rÃ©pertoire de sauvegarde de parties
 	if (dUnRepertoire != NULL) {
 		struct dirent * ent;
 		while ((ent = readdir(dUnRepertoire)) != NULL)
@@ -118,7 +115,7 @@ unsigned int CChargeurPartie::CHPCompterNombreFichiers(DIR * dUnRepertoire) {
 	return uiNbFichiers;
 }
 
-CPartie *  CChargeurPartie::CHPChargerPartie() {
+CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 	CPartie * PARPartie = NULL;
 	DIR * dRep = opendir("./Parties/");
 	unsigned int uiNbFichiers = CHPCompterNombreFichiers(dRep);
@@ -157,6 +154,7 @@ CPartie *  CChargeurPartie::CHPChargerPartie() {
 		cin.clear();
 		cout << "Vous avez choisit de generer la partie : " << psParties[uiNumFichier - 1] << endl;
 		PARPartie = CHPLireFichier("./Parties/" + psParties[uiNumFichier - 1]);
+		delete [] psParties;
 	}
 	else {
 		cout << endl << "Aucune partie sauvegardee !" << endl << endl;
@@ -207,6 +205,14 @@ CPartie * CChargeurPartie::CHPLireFichier(string sChemin) {
 	CGrille GRIGrille(ppuiGrille, uiTailleGrille);
 	CGrille GRIGrilleOrigine(ppuiGrilleOrigine, uiTailleGrille);
 	CPartie * PARPartieChargee = new CPartie(&GRIGrille, &GRIGrilleOrigine, uiTailleGrille, sNomJoueur, uiCasesRemplies, uiNbCoups, bStatut);
+
+	// On libere la memoire
+	for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle) {
+		delete [] ppuiGrille[uiBoucle];
+		delete [] ppuiGrilleOrigine[uiBoucle];
+	}
+	delete [] ppuiGrille;
+	delete [] ppuiGrilleOrigine;
 
 	return PARPartieChargee;
 }

@@ -1,9 +1,9 @@
-#include <stdlib.h>
-#include <iostream>
-
+/**
+* \file ControleurGrille.cpp
+* \author Benjamin Caldas
+* \brief Le fichier source de la classe CControleurGrille.
+*/
 #include "ControleurGrille.h"
-
-using namespace std;
 
 CControleurGrille::CControleurGrille() {
 	pGRIGrille = NULL;

@@ -1,3 +1,8 @@
+/**
+* \file Except.cpp
+* \author Benjamin Caldas
+* \brief Le fichier source de la classe CExcept.
+*/
 #include "Except.h"
 
 CExcept::CExcept(void) {

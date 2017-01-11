@@ -1,16 +1,19 @@
+/**
+* \file Parseur.cpp
+* \author Benjamin Caldas
+* \brief Le fichier source de la classe CParseur.
+*/
 #include "Parseur.h"
 
-CParseur::CParseur(char * pcChemin){
+CParseur::CParseur(std::string sChemin){
 
 	pcPARValeur = new char [TAILLE_MAX_VALEUR];
 	pcPARAttribut = new char [TAILLE_MAX_ATTRIBUT];
 
-	fichier.open(pcChemin);
+	fichier.open(sChemin);
 	if(!fichier){
-		throw CExcept(ERREUR_OUVERTURE_FICHIER);
+		throw CExcept(EXC_OUV_FIC);
 	}
-
-	//TODO : Tester fichier vide
 }
 
 CParseur::~CParseur(){
@@ -29,7 +32,7 @@ void CParseur::PARModifierFichier(char* pcChemin){
 
 	fichier.open(pcChemin);
 	if(!fichier){
-		throw CExcept(ERREUR_OUVERTURE_FICHIER);
+		throw CExcept(EXC_OUV_FIC);
 	}
 }
 

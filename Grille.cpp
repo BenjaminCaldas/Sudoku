@@ -1,9 +1,9 @@
-#include <iostream>
-#include <stdlib.h>
-
+/**
+* \file Grille.cpp
+* \author Benjamin Caldas
+* \brief Le fichier source de la classe CGrille.
+*/
 #include "Grille.h"
-
-using namespace std;
 
 CGrille::CGrille(void) {
 	uiGRITaille = 0;
@@ -29,7 +29,7 @@ CGrille::CGrille(CGrille & GRIUnSudoku) {
 			}
 }
 
-CGrille::CGrille(unsigned int ** uiUneGrille, unsigned int uiUneTaille) {
+CGrille::CGrille(unsigned int ** ppuiUneGrille, unsigned int uiUneTaille) {
 	unsigned int uiBoucle;
 	unsigned int uiBoucle2;
 
@@ -40,7 +40,7 @@ CGrille::CGrille(unsigned int ** uiUneGrille, unsigned int uiUneTaille) {
 	}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2) {
-			ppuiGRIGrille[uiBoucle][uiBoucle2] = uiUneGrille[uiBoucle][uiBoucle2];
+			ppuiGRIGrille[uiBoucle][uiBoucle2] = ppuiUneGrille[uiBoucle][uiBoucle2];
 		}
 	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		for (uiBoucle2 = 0; uiBoucle2 < uiGRITaille; ++uiBoucle2)
@@ -52,10 +52,8 @@ CGrille::CGrille(unsigned int ** uiUneGrille, unsigned int uiUneTaille) {
 CGrille::~CGrille(void) {
 	unsigned int uiBoucle;
 
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle) {
+	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
 		delete [] ppuiGRIGrille[uiBoucle];
-		
-	}
 	delete [] ppuiGRIGrille;
 	
 }

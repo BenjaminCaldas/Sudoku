@@ -1,3 +1,8 @@
+/**
+* \file Partie.cpp
+* \author Benjamin Caldas
+* \brief Le fichier source de la classe CPartie.
+*/
 #include "Partie.h"
 
 CPartie::CPartie() {
@@ -185,7 +190,7 @@ void CPartie::PARJouer() {
 		cout << "7 : Quitter le jeu" << endl;
 		cin >> uiChoix;
 		cin.clear();
-		// Bug si l'on rentre un ou plusieurs caractères
+		// Bug si l'on rentre un ou plusieurs caractÃ¨res
 		if (uiChoix == 1) {
 			unsigned int * uiCoord = PARDemanderCoordonnees();
 			unsigned int uiLigne = uiCoord[0];
@@ -231,10 +236,10 @@ void CPartie::PARJouer() {
 				if (uiChoix == 6) {
 					CSolveur SLVSolveur(pGRIGrille);
 					SLVSolveur.SLVResoudre();
+					SLVSolveur.SLVAfficherStatistiques();
 					uiPARCasesRemplies = uiPARTaille * uiPARTaille;
 					uiPARNbCoups = 0;
 					bPARStatut = 1;
-					cout << endl << "Grille resolue en " << SLVSolveur.SLVRecupererTempsResolution() << " secondes !" << endl;
 				}
 				if (uiChoix == 7) {
 					cout << endl << "A BIENTOT !" << endl;

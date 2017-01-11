@@ -1,90 +1,63 @@
-/*************************************************************
-Titre : Classe CExcept
-**************************************************************
-Cette classe permet de créer des objets qui sont remontés lors
-de la levée d'exceptions dans un programme.
-**************************************************************/
-#pragma once
-// Définitions de quelques valeurs de CExcept utiles à notre programme
-#define EXC_DFLT 0 // Valeur par défaut
-//...
+/*!
+* \file Except.h
+* \author Benjamin Caldas
+* \brief Le fichier d'en-tÃªte de la classe CExcept.
+*/
+#ifndef CEXCEPT_H
+#define CEXCEPT_H
 
-class CExcept
-{
-private:
-	unsigned int uiEXCValeur; // Contient la valeur de l'excpetion CExcept
+/* DÃ©finitions de quelques valeurs de CExcept utiles Ã  notre programme */
+#define EXC_DFLT 0 /*!< Valeur par defaut de l'exception */
+#define EXC_IDX_ERR 1 /*!< Index hors de la grille de Sudoku */
+#define EXC_OUV_FIC 7 /*!< Erreur d'ouverture du fichier */
+/* ... */
 
-public:
-	/********************************************
-	Nom : CExcept()
-	*********************************************
-	Rôle : Constructeur par défaut
-	*********************************************
-	Entrée : Rien
-	Pré-Conditions : Aucunes
-	Sortie : Rien
-	Post-Conditions : uiEXCValeur initialisée à 0
-	*********************************************/
-	CExcept(void);
+/*!
+* \class CExcept
+* \brief Cette classe permet de crÃ©er des objets qui seront remontÃ©s lors de la levÃ©e d'exceptions dans un programme.
+*/
+class CExcept {
+	private:
+		unsigned int uiEXCValeur; /*!< Contient la valeur de l'exception CExcept */
 
-	/***************************************************
-	Nom : CExcept(CExcept &EXCParam)
-	****************************************************
-	Rôle : Constructeur de copie
-	****************************************************
-	Entrée : CExcept &EXCParam
-	Pré-Conditions : Aucunes
-	Sortie : Rien
-	Post-Conditions : uiEXCValeur = EXCParam.uiEXCValeur
-	****************************************************/
-	CExcept(CExcept &EXCParam);
+	public:
+		/*!
+		* \brief Constructeur par dÃ©fault de la classe CExcept.
+		* \param void
+		*/
+		CExcept(void);
 
-	/********************************************
-	Nom : CExcept(unsigned int uiValeurParam)
-	*********************************************
-	Rôle : Constructeur prenant un unsigned int
-	en paramètre
-	*********************************************
-	Entrée : unsigned int uiValeurParam
-	Pré-Conditions : Aucunes
-	Sortie : Rien
-	Post-Conditions : uiEXCValeur = uiValeurParam
-	*********************************************/
-	CExcept(unsigned int uiValeurParam);
+		/*!
+		* \brief Constructeur de recopie de la classe CExcept.
+		* \param EXCParam L'objet de la classe CExcept Ã  recopier.
+		*/
+		CExcept(CExcept &EXCParam);
 
-	/********************************************
-	Nom : ~CExcept()
-	*********************************************
-	Rôle : Destructeur
-	*********************************************
-	Entrée : Rien
-	Pré-Conditions : Aucunes
-	Sortie : Rien
-	Post-Conditions : Objet CExcept détruit
-	*********************************************/
-	~CExcept(void);
+		/*!
+		* \brief Constructeur de la classe CExcept.
+		* \param uiValeurParam La valeur de l'exception.
+		*/
+		CExcept(unsigned int uiValeurParam);
 
-	/********************************************
-	Nom : EXCLireValeur()
-	*********************************************
-	Rôle : Lis la valeur de l'exception
-	*********************************************
-	Entrée : Rien
-	Pré-Conditions : Aucunes
-	Sortie : uiEXCValeur
-	Post-Conditions : uiEXCValeur retourné
-	*********************************************/
-	unsigned int EXCLireValeur(void);
+		/*!
+		* \brief Destructeur de la classe CExcept.
+		* \param void
+		*/
+		~CExcept(void);
 
-	/**************************************************
-	Nom : EXCModifierValeur(unsigned int uiValeurParam)
-	***************************************************
-	Rôle : Modifie la valeur de l'exception
-	***************************************************
-	Entrée : unsigned int uiValeurParam
-	Pré-Conditions : Aucunes
-	Sortie : Rien
-	Post-Conditions : uiEXCValeur = uiValeurParam
-	***************************************************/
-	void EXCModifierValeur(unsigned int uiValeurParam);
+		/*!
+		* \brief Fonction permettant de lire la valeur d'un objet d ela classe CExcept.
+		* \param void
+		* \return La valeur de l'exception.
+		*/
+		unsigned int EXCLireValeur(void);
+
+		/*!
+		* \brief Fonction permettant de modifier la valeur d'un objet de la classe CExcept.
+		* \param uiValeurParam La nouvelle valeur de l'exception.
+		* \return void
+		*/
+		void EXCModifierValeur(unsigned int uiValeurParam);
 };
+
+#endif
