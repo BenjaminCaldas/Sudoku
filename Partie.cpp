@@ -175,16 +175,14 @@ void CPartie::PARJouer() {
 	PARAfficherGrilleAvecCouleurs();
 	cout << endl;
 	while (uiChoix == 0 && bContinuer == 1) {
-		if (bPARStatut != 1) {
-			cout << endl << "Que souhaitez-vous faire ?" << endl;
-			cout << "1 : Placer un numero sur la grille" << endl;
-			cout << "2 : Reinitialiser la grille" << endl;
-			cout << "3 : Afficher les statistiques de la partie" << endl;
-			cout << "4 : Afficher la grille" << endl;
-			cout << "5 : Sauvegarder la partie" << endl;
-			cout << "6 : Lancer la resolution automatique" << endl;
-			cout << "7 : Quitter le jeu" << endl;
-		}
+		cout << endl << "Que souhaitez-vous faire ?" << endl;
+		cout << "1 : Placer un numero sur la grille" << endl;
+		cout << "2 : Reinitialiser la grille" << endl;
+		cout << "3 : Afficher les statistiques de la partie" << endl;
+		cout << "4 : Afficher la grille" << endl;
+		cout << "5 : Sauvegarder la partie" << endl;
+		cout << "6 : Lancer la resolution automatique" << endl;
+		cout << "7 : Quitter le jeu" << endl;
 		cin >> uiChoix;
 		cin.clear();
 		// Bug si l'on rentre un ou plusieurs caractères
@@ -232,10 +230,11 @@ void CPartie::PARJouer() {
 					PARSauvegarderPartie();
 				if (uiChoix == 6) {
 					CSolveur SLVSolveur(pGRIGrille);
-					SLVSolveur.SLVResoudre(0);
+					SLVSolveur.SLVResoudre();
 					uiPARCasesRemplies = uiPARTaille * uiPARTaille;
 					uiPARNbCoups = 0;
 					bPARStatut = 1;
+					cout << endl << "Grille resolue en " << SLVSolveur.SLVRecupererTempsResolution() << " secondes !" << endl;
 				}
 				if (uiChoix == 7) {
 					cout << endl << "A BIENTOT !" << endl;

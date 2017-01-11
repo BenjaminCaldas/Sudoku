@@ -1,6 +1,14 @@
-#pragma once
+#ifndef CSOLVEUR_H
+#define CSOLVEUR_H
+
+#include <stdlib.h>
+#include <ctime>
+#include <iostream>
 
 #include "Grille.h"
+#include "ControleurGrille.h"
+
+using namespace std;
 
 class CSolveur
 {
@@ -14,6 +22,11 @@ class CSolveur
 		CSolveur();
 		CSolveur(CSolveur & SLVUnSolveur);
 		CSolveur(CGrille * GRIUneGrille);
-		bool SLVResoudre(unsigned int uiPosition);
+
+		unsigned int SLVRecupererTempsResolution();
+
+		bool SLVEstValide(unsigned int uiPosition);
+		void SLVResoudre();
 };
 
+#endif
