@@ -60,6 +60,7 @@ unsigned int * CPartie::PARDemanderCoordonnees() {
 		// On récupère la ligne
 		while (uiCoord[0] == 0) {
 			cout << "Ligne : ";
+			// Cette condition permet de sécuriser la saisie et évite au programme de planter en cas de mauvaise saisie
 			if (!(cin >> uiCoord[0]) || (uiCoord[0] < 1) || (uiCoord[0] > uiPARTaille)) { // On force l'utilisateur a entrer un entier compris entre 1 et uiPARTaille.
 				cin.clear();
 				cin.ignore();
@@ -70,6 +71,7 @@ unsigned int * CPartie::PARDemanderCoordonnees() {
 		// On récupère la colonne
 		while (uiCoord[1] == 0) {
 			cout << "Colonne : ";
+			// Cette condition permet de sécuriser la saisie et évite au programme de planter en cas de mauvaise saisie
 			if (!(cin >> uiCoord[1]) || (uiCoord[1] < 1) || (uiCoord[1] > uiPARTaille)) { // On force l'utilisateur a entrer un entier compris entre 1 et uiPARTaille.
 				cin.clear();
 				cin.ignore();
@@ -91,6 +93,7 @@ unsigned int CPartie::PARDemanderValeur() {
 
 	while (uiValeur == 0) {
 		cout << "Valeur a ajouter : ";
+		// Cette condition permet de sécuriser la saisie et évite au programme de planter en cas de mauvaise saisie
 		if (!(cin >> uiValeur) || (uiValeur < 1) || (uiValeur > uiPARTaille)) { // On force l'utilisateur a entrer un entier compris entre 1 et uiPARTaille.
 				cin.clear();
 				cin.ignore();
@@ -197,6 +200,7 @@ void CPartie::PARJouer() {
 		cout << "5 : Sauvegarder la partie" << endl;
 		cout << "6 : Lancer la resolution automatique" << endl;
 		cout << "7 : Quitter le jeu" << endl;
+		// Cette condition permet de sécuriser la saisie et évite au programme de planter en cas de mauvaise saisie
 		if (!(cin >> uiChoix) || (uiChoix < 1) || (uiChoix > 7)) {
 			cin.clear();
 			cin.ignore();

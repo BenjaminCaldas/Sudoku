@@ -23,6 +23,7 @@ CPartie * CChargeurPartie::CHPMenuPrincipal(void) {
 		cout << "Que souhaitez-vous faire ?" << endl;
 		cout << "1 - Jouer une nouvelle partie" << endl;
 		cout << "2 - Charger une partie existante" << endl;
+		// Cette condition permet de sécuriser la saisie et évite au programme de planter en cas de mauvaise saisie
 		if (!(cin >> uiChoice)) {
 			cin.clear();
 			cin.ignore();
@@ -46,7 +47,7 @@ CPartie * CChargeurPartie::CHPNouvellePartie(void) {
 	char pseudo[64];
 	cout << "Quel est votre nom de joueur ?" << endl;
 	cin.ignore(1024, '\n'); // Vidage du buffer
-    cin.getline(pseudo, sizeof(pseudo)); 
+    cin.getline(pseudo, sizeof(pseudo)); // On préfère getnline à cin pour sécuriser la saisie et éviter au programme de planter si l'on entre un espace
 	sCHPNomJoueur = pseudo;
 	cout << sCHPNomJoueur;
 
@@ -177,7 +178,8 @@ CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 		unsigned int uiNumFichier = 0;
 		while (uiNumFichier == 0) {
 			cout << endl << "Quel est le numero de la partie a charger ?" << endl;
-			if (!(cin >> uiNumFichier) || (uiNumFichier < 1) || (uiNumFichier > uiNbStrings)) {
+			// Cette condition permet de sécuriser la saisie et évite au programme de planter en cas de mauvaise saisie
+			if (!(cin >> uiNumFichier) || (uiNumFichier < 1) || (uiNumFichier > uiNbStrings)) { 
 				cin.clear();
 				cin.ignore();
 				uiNumFichier = 0;
