@@ -9,8 +9,10 @@
 /* Définitions de quelques valeurs de CExcept utiles à notre programme */
 #define EXC_DFLT 0 /*!< Valeur par defaut de l'exception */
 #define EXC_IDX_ERR 1 /*!< Index hors de la grille de Sudoku */
-#define EXC_OUV_FIC 7 /*!< Erreur d'ouverture du fichier */
-/* ... */
+#define EXC_VAL_INC 2 /*!< Valeur incorrecte pour un Sudoku */
+#define EXC_ZONE_INC 3 /*!< Zone incorrecte */
+#define EXC_REP_OUV_ERR 4 /*!< Erreur d'ouverture du répertoire */
+#define EXC_OUV_FIC 5 /*!< Erreur d'ouverture du fichier */
 
 /*!
 * \class CExcept

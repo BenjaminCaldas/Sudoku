@@ -23,7 +23,10 @@ CPartie * CChargeurPartie::CHPMenuPrincipal(void) {
 		cout << "Que souhaitez-vous faire ?" << endl;
 		cout << "1 - Jouer une nouvelle partie" << endl;
 		cout << "2 - Charger une partie existante" << endl;
-		cin >> uiChoice;
+		if (!(cin >> uiChoice)) {
+			cin.clear();
+			cin.ignore();
+		}
 		switch (uiChoice) {
 			case 1 :
 				PARPartie = CHPNouvellePartie();
@@ -40,65 +43,78 @@ CPartie * CChargeurPartie::CHPMenuPrincipal(void) {
 }
 
 CPartie * CChargeurPartie::CHPNouvellePartie(void) {
+	char pseudo[64];
 	cout << "Quel est votre nom de joueur ?" << endl;
-	cin >> sCHPNomJoueur;
+	cin.ignore(1024, '\n'); // Vidage du buffer
+    cin.getline(pseudo, sizeof(pseudo)); 
+	sCHPNomJoueur = pseudo;
 	cout << sCHPNomJoueur;
-	cin.ignore(); // On vide le buffer au cas ou l'utilisateur a entre un pseudo avec espace.
 
 	// Generer une grille dans le dossier ./Grilles/
 	DIR * dRep = opendir("./Grilles/");
-	unsigned int uiNbFichiers = CHPCompterNombreFichiers(dRep);
-	cout << endl << "Generation d'un grille parmi les " << uiNbFichiers - 2 << " existantes ..." << endl;
-
-	// Generation d'un nombre aleatoire
-	srand(time(NULL));
-	unsigned int uiNumGrilleAleatoire = rand() % (uiNbFichiers - 2) + 1;
-
-	// Ouverture du fichier correspondant au numero de la grille
-	string sNomFichier = "./Grilles/Grille";
-	string sNumFichier = to_string(uiNumGrilleAleatoire);
-	string sExtension = ".txt";
-	string sChemin = sNomFichier + sNumFichier + sExtension;
-
-	// On parse le fichier
-	CParseur PARParseur(sChemin);
-	string sProprietes[NB_LIGNES_GRILLE];
-	unsigned int uiNbLigne;
-
-	for (uiNbLigne = 0; uiNbLigne < NB_LIGNES_GRILLE; ++uiNbLigne) {
-		PARParseur.PARLireLigne();
-		sProprietes[uiNbLigne] = PARParseur.PARLireValeur();
+	unsigned int uiNbFichiers = 0;
+	if (dRep != NULL)
+		uiNbFichiers = CHPCompterNombreFichiers(dRep);
+	else {
+		// Lever exception (erreur ouverture répertoire)
+		throw CExcept(EXC_REP_OUV_ERR);
 	}
+	if (uiNbFichiers - 2 != 0) {
+		cout << endl << "Generation d'un grille parmi les " << uiNbFichiers - 2 << " existantes ..." << endl;
 
-	// On recupere les valeurs dans le bon type
-	unsigned int uiCasesRemplies = stoul(sProprietes[0], nullptr, 0); 
-	unsigned int uiTailleGrille = stoul(sProprietes[1], nullptr, 0);
+		// Generation d'un nombre aleatoire
+		srand(time(NULL));
+		unsigned int uiNumGrilleAleatoire = rand() % (uiNbFichiers - 2) + 1;
 
-	// Recuperation de la grille
-	unsigned int uiBoucle;
-	unsigned int uiBoucle2;
-	unsigned int uiNumCaractere = 0;
-	unsigned int ** ppuiGrille = new unsigned int * [uiTailleGrille];
+		// Ouverture du fichier correspondant au numero de la grille
+		string sNomFichier = "./Grilles/Grille";
+		string sNumFichier = to_string(uiNumGrilleAleatoire);
+		string sExtension = ".txt";
+		string sChemin = sNomFichier + sNumFichier + sExtension;
 
-	for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
-		ppuiGrille[uiBoucle] = new unsigned int [uiTailleGrille];
+		// On parse le fichier
+		CParseur PARParseur(sChemin);
+		string sProprietes[NB_LIGNES_GRILLE];
+		unsigned int uiNbLigne;
 
-	for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
-		for (uiBoucle2 = 0; uiBoucle2 < uiTailleGrille; ++uiBoucle2) {
-			ppuiGrille[uiBoucle][uiBoucle2] = sProprietes[2][uiNumCaractere] - '0';
-			++uiNumCaractere;
+		for (uiNbLigne = 0; uiNbLigne < NB_LIGNES_GRILLE; ++uiNbLigne) {
+			PARParseur.PARLireLigne();
+			sProprietes[uiNbLigne] = PARParseur.PARLireValeur();
 		}
 
-	// Creation de l'objet de la classe Partie
-	CGrille GRIGrille(ppuiGrille, uiTailleGrille);
-	CPartie * PARNouvellePartie = new CPartie(&GRIGrille, sCHPNomJoueur);
+		// On recupere les valeurs dans le bon type
+		unsigned int uiCasesRemplies = stoul(sProprietes[0], nullptr, 0); 
+		unsigned int uiTailleGrille = stoul(sProprietes[1], nullptr, 0);
 
-	// On libere la memoire
-	for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
-		delete [] ppuiGrille[uiBoucle];
-	delete [] ppuiGrille; 
+		// Recuperation de la grille
+		unsigned int uiBoucle;
+		unsigned int uiBoucle2;
+		unsigned int uiNumCaractere = 0;
+		unsigned int ** ppuiGrille = new unsigned int * [uiTailleGrille];
 
-	return PARNouvellePartie;
+		for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
+			ppuiGrille[uiBoucle] = new unsigned int [uiTailleGrille];
+
+		for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
+			for (uiBoucle2 = 0; uiBoucle2 < uiTailleGrille; ++uiBoucle2) {
+				ppuiGrille[uiBoucle][uiBoucle2] = sProprietes[2][uiNumCaractere] - '0';
+				++uiNumCaractere;
+			}
+
+		// Creation de l'objet de la classe Partie
+		CGrille GRIGrille(ppuiGrille, uiTailleGrille);
+		CPartie * PARNouvellePartie = new CPartie(&GRIGrille, sCHPNomJoueur);
+
+		// On libere la memoire
+		for (uiBoucle = 0; uiBoucle < uiTailleGrille; ++uiBoucle)
+			delete [] ppuiGrille[uiBoucle];
+		delete [] ppuiGrille;
+		return PARNouvellePartie;
+	}
+	else {
+		cout << endl << "Aucune grille dans le repertoire" << endl;
+		return NULL;
+	}
 }
 
 unsigned int CChargeurPartie::CHPCompterNombreFichiers(DIR * dUnRepertoire) {
@@ -118,7 +134,13 @@ unsigned int CChargeurPartie::CHPCompterNombreFichiers(DIR * dUnRepertoire) {
 CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 	CPartie * PARPartie = NULL;
 	DIR * dRep = opendir("./Parties/");
-	unsigned int uiNbFichiers = CHPCompterNombreFichiers(dRep);
+	unsigned int uiNbFichiers = 0;
+	if (dRep != NULL)
+		uiNbFichiers = CHPCompterNombreFichiers(dRep);
+	else {
+		// Lever exception (erreur ouverture répertoire)
+		throw CExcept(EXC_REP_OUV_ERR);
+	}
 	
 	// On ignore les deux premiers fichiers : '.' et '..'
 	if (uiNbFichiers > 2) {
@@ -141,6 +163,10 @@ CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 			}
 			closedir(dRep);
 		}
+		else {
+			// Lever exception (erreur ouverture répertoire)
+			throw CExcept(EXC_REP_OUV_ERR);
+		}
 
 		// On affiche le contenu du tableau contenant le nom des parties
 		unsigned int uiBoucle;
@@ -149,9 +175,14 @@ CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 
 		// On recupere l'indice du fichier que l'utilisateur veut charger
 		unsigned int uiNumFichier = 0;
-		cout << endl << "Quel est le numero de la partie a charger ?" << endl;
-		cin >> uiNumFichier;
-		cin.clear();
+		while (uiNumFichier == 0) {
+			cout << endl << "Quel est le numero de la partie a charger ?" << endl;
+			if (!(cin >> uiNumFichier) || (uiNumFichier < 1) || (uiNumFichier > uiNbStrings)) {
+				cin.clear();
+				cin.ignore();
+				uiNumFichier = 0;
+			}
+		}
 		cout << "Vous avez choisit de generer la partie : " << psParties[uiNumFichier - 1] << endl;
 		PARPartie = CHPLireFichier("./Parties/" + psParties[uiNumFichier - 1]);
 		delete [] psParties;

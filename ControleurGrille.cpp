@@ -18,8 +18,16 @@ CControleurGrille::CControleurGrille(CGrille * GRIUneGrille) {
 }
 
 bool CControleurGrille::CGRVerifierLigne(unsigned int uiNo, unsigned int uiNoLigne) {
-	unsigned int uiBoucle;
 	unsigned int uiTaille = pGRIGrille->GRILireTaille();
+	if (uiNoLigne < 0 || uiNoLigne >= uiTaille) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
+	if (uiNo < 0 || uiNo > uiTaille) {
+		// Lever exception (valeur incorrecte)
+		throw CExcept(EXC_VAL_INC);
+	}
+	unsigned int uiBoucle;
 
 	for (uiBoucle = 0; uiBoucle < uiTaille; ++uiBoucle)
 		if (pGRIGrille->GRILireValeur(uiNoLigne, uiBoucle) == uiNo)
@@ -29,8 +37,16 @@ bool CControleurGrille::CGRVerifierLigne(unsigned int uiNo, unsigned int uiNoLig
 }
 
 bool CControleurGrille::CGRVerifierColonne(unsigned int uiNo, unsigned int uiNoColonne) {
-	unsigned int uiBoucle;
 	unsigned int uiTaille = pGRIGrille->GRILireTaille();
+	if (uiNoColonne < 0 || uiNoColonne >= uiTaille) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
+	if (uiNo < 0 || uiNo > uiTaille) {
+		// Lever exception (valeur incorrecte)
+		throw CExcept(EXC_VAL_INC);
+	}
+	unsigned int uiBoucle;
 
 	for (uiBoucle = 0; uiBoucle < uiTaille; ++uiBoucle)
 		if (pGRIGrille->GRILireValeur(uiBoucle, uiNoColonne) == uiNo)
@@ -40,6 +56,15 @@ bool CControleurGrille::CGRVerifierColonne(unsigned int uiNo, unsigned int uiNoC
 }
 
 bool CControleurGrille::CGRVerifierZone(unsigned int uiNo, unsigned int uiNoZone) {
+	unsigned int uiTaille = pGRIGrille->GRILireTaille();
+	if (uiNoZone < 1 || uiNoZone > uiTaille) {
+		// Lever exception (zone incorrect)
+		throw CExcept(EXC_ZONE_INC);
+	}
+	if (uiNo < 0 || uiNo > uiTaille) {
+		// Lever exception (valeur incorrecte)
+		throw CExcept(EXC_VAL_INC);
+	}
 	unsigned int uiBoucle;
 	unsigned int uiBoucle2;
 
@@ -103,12 +128,34 @@ bool CControleurGrille::CGRVerifierZone(unsigned int uiNo, unsigned int uiNoZone
 }
 
 bool CControleurGrille::CGRVerifierDisponibiliteCase(unsigned int uiNoLigne, unsigned int uiNoColonne) {
+	unsigned int uiTaille = pGRIGrille->GRILireTaille();
+	if (uiNoLigne < 0 || uiNoLigne >= uiTaille) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
+	if (uiNoColonne < 0 || uiNoColonne >= uiTaille) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
 	if (pGRIGrille->GRILireValeur(uiNoLigne, uiNoColonne) == 0)
 		return true;
 	return false;
 }
 
 bool CControleurGrille::CGRModifierCase(unsigned int uiLigne, unsigned int uiColonne, unsigned int uiValeur){
+	unsigned int uiTaille = pGRIGrille->GRILireTaille();
+	if (uiLigne < 0 || uiLigne >= uiTaille) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
+	if (uiColonne < 0 || uiColonne >= uiTaille) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
+	if (uiValeur < 0 || uiValeur > uiTaille) {
+		// Lever exception (valeur incorrecte)
+		throw CExcept(EXC_VAL_INC);
+	}
 	if (!CGRVerifierLigne(uiValeur, uiLigne) || !CGRVerifierColonne(uiValeur, uiColonne) ||
 	!CGRVerifierZone(uiValeur, pGRIGrille->GRIRecupererZone(uiLigne, uiColonne)))
 		return false;

@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <iostream>
 
+#include "Except.h"
+
 using namespace std;
 
 /*!

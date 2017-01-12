@@ -42,54 +42,63 @@ CPartie::CPartie(CGrille * pGRIUneGrille, CGrille * pGRIUneGrilleOrigine, unsign
 }
 
 CPartie::~CPartie() {
-	delete pGRIGrille;
-	delete pGRIGrilleOrigine;
+	if (pGRIGrille != NULL)
+		delete pGRIGrille;
+	if (pGRIGrilleOrigine != NULL)
+		delete pGRIGrilleOrigine;
 }
 
 unsigned int * CPartie::PARDemanderCoordonnees() {
 	unsigned int uiCoord[2];
+	uiCoord[0] = 0;
+	uiCoord[1] = 0;
 	bool bContinuerX = 0;
 	bool bContinuerY = 0;
 
-	cout << "Veuillez entrer les coordonnees de la case a modifier :" << endl;
-	while (bContinuerX == 0 || bContinuerY == 0) {
-		cout << "Ligne : ";
-		cin >> uiCoord[0];
-		cin.ignore();
-		uiCoord[0] -= 1;
-		if (uiCoord[0] >= 0 && uiCoord[0] < uiPARTaille) 
-			bContinuerX = 1;
-		cout << "Colonne : ";
-		cin >> uiCoord[1];
-		cin.ignore();
-		uiCoord[1] -= 1;
-		if (uiCoord[1] >= 0 && uiCoord[1] < uiPARTaille) 
-			bContinuerY = 1;
-		if (bContinuerX != 0 && bContinuerY != 0) {
-			if (PARVerifierCoordonneesGrilleOrigine(uiCoord[0], uiCoord[1]) == 0) {
-				cout << "Coordonnees de la grille d'origine !" << endl;
-				bContinuerX = bContinuerY = 0;
+	while ((uiCoord[0] == 0) || (uiCoord[1] == 0)) {
+		cout << "Veuillez entrer les coordonnees de la case a modifier :" << endl;
+		// On récupère la ligne
+		while (uiCoord[0] == 0) {
+			cout << "Ligne : ";
+			if (!(cin >> uiCoord[0]) || (uiCoord[0] < 1) || (uiCoord[0] > uiPARTaille)) { // On force l'utilisateur a entrer un entier compris entre 1 et uiPARTaille.
+				cin.clear();
+				cin.ignore();
+				uiCoord[0] = 0;
 			}
 		}
-		if (bContinuerX == 0 || bContinuerY == 0)
-			cout << "Erreur, veuillez recommencer !" << endl << endl;
+		uiCoord[0] -= 1;
+		// On récupère la colonne
+		while (uiCoord[1] == 0) {
+			cout << "Colonne : ";
+			if (!(cin >> uiCoord[1]) || (uiCoord[1] < 1) || (uiCoord[1] > uiPARTaille)) { // On force l'utilisateur a entrer un entier compris entre 1 et uiPARTaille.
+				cin.clear();
+				cin.ignore();
+				uiCoord[1] = 0;
+			}
+		}
+		uiCoord[1] -= 1;
+		if (PARVerifierCoordonneesGrilleOrigine(uiCoord[0], uiCoord[1]) == 0) {
+				cout << "Coordonnees de la grille d'origine !" << endl;
+				uiCoord[0] = 0;
+				uiCoord[1] = 0;
+		}
 	}
-
 	return uiCoord;
 }
 
 unsigned int CPartie::PARDemanderValeur() {
-	unsigned int uiValeur;
-	bool bContinuer = 0;
+	unsigned int uiValeur = 0;
 
-	while (bContinuer == 0) {
-	cout << "Valeur a ajouter : ";
-	cin >> uiValeur;
-	if (uiValeur > 0 && uiValeur <= uiPARTaille)
-		bContinuer = 1;
-	else
-		cout << "Erreur, veuillez recommencer !" << endl << endl;
-	}
+	while (uiValeur == 0) {
+		cout << "Valeur a ajouter : ";
+		if (!(cin >> uiValeur) || (uiValeur < 1) || (uiValeur > uiPARTaille)) { // On force l'utilisateur a entrer un entier compris entre 1 et uiPARTaille.
+				cin.clear();
+				cin.ignore();
+				uiValeur = 0;
+			}
+		else
+			cout << "Erreur, veuillez recommencer !" << endl << endl;
+		}
 
 	return uiValeur;
 }
@@ -175,7 +184,7 @@ void CPartie::PARJouer() {
 	bool bContinuer = 1;
 	unsigned int uiChoix = 0;
 	
-	cout << endl << "Bonjour " << sPARNomJoueur << ", vous allez jouer une partie" << endl;
+	cout << endl << "Bonjour " << sPARNomJoueur << ", vous allez jouer une partie." << endl;
 	cout << endl << "Voici votre grille de jeu :" << endl;
 	PARAfficherGrilleAvecCouleurs();
 	cout << endl;
@@ -188,9 +197,10 @@ void CPartie::PARJouer() {
 		cout << "5 : Sauvegarder la partie" << endl;
 		cout << "6 : Lancer la resolution automatique" << endl;
 		cout << "7 : Quitter le jeu" << endl;
-		cin >> uiChoix;
-		cin.clear();
-		// Bug si l'on rentre un ou plusieurs caractères
+		if (!(cin >> uiChoix) || (uiChoix < 1) || (uiChoix > 7)) {
+			cin.clear();
+			cin.ignore();
+		}
 		if (uiChoix == 1) {
 			unsigned int * uiCoord = PARDemanderCoordonnees();
 			unsigned int uiLigne = uiCoord[0];
@@ -237,6 +247,7 @@ void CPartie::PARJouer() {
 					CSolveur SLVSolveur(pGRIGrille);
 					SLVSolveur.SLVResoudre();
 					SLVSolveur.SLVAfficherStatistiques();
+					PARAfficherGrilleAvecCouleurs();
 					uiPARCasesRemplies = uiPARTaille * uiPARTaille;
 					uiPARNbCoups = 0;
 					bPARStatut = 1;

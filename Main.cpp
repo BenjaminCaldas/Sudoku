@@ -53,13 +53,36 @@ int main (unsigned int argc, char * argv[])
 	_CrtSetReportMode( _CRT_ERROR, _CRTDBG_MODE_DEBUG ); // Permet d'afficher le rapport des fuites memoires dans la fenêtre "sortie" de Visual Studio
 	
 	// On charge une partie a l'aide du chargeur
-	CChargeurPartie CHPChargeurPartie1;
-	CPartie * PARPartie = CHPChargeurPartie1.CHPMenuPrincipal();
-	PARPartie->PARJouer();
-
-	// On bloque le terminal
-	int a;
-	cin >> a;
+	try {
+		CChargeurPartie CHPChargeurPartie1;
+		CPartie * PARPartie = CHPChargeurPartie1.CHPMenuPrincipal();
+		if (PARPartie != NULL)	
+			PARPartie->PARJouer();
+		else
+			cout << "Vous ne pouvez pas jouer :/" << endl;
+		delete PARPartie;
+	}
+	catch(CExcept EXCParam) {
+		switch(EXCParam.EXCLireValeur()) {
+			case EXC_IDX_ERR :
+				cerr << "Erreur " << EXC_IDX_ERR << " : Index hors de la grille de Sudoku." << endl;
+				exit(EXC_IDX_ERR);
+			case EXC_VAL_INC :
+				cerr << "Erreur " << EXC_VAL_INC << " : Valeur incorrecte pour ce Sudoku." << endl;
+				exit(EXC_VAL_INC);
+			case EXC_ZONE_INC :
+				cerr << "Erreur " << EXC_ZONE_INC << " : Zone incorrecte." << endl;
+				exit(EXC_ZONE_INC);
+			case EXC_REP_OUV_ERR :
+				cerr << "Erreur " << EXC_REP_OUV_ERR << " : Ouverture du repertoire impossible." << endl;
+				exit(EXC_REP_OUV_ERR);
+			case EXC_OUV_FIC :
+				cerr << "Erreur " << EXC_OUV_FIC << " : Ouverture du fichier impossible." << endl;
+				exit(EXC_OUV_FIC);
+			default :
+				return 0;
+		}
+	}
 
 	// Pour les fuites mémoires
 	_CrtMemState s1;

@@ -11,7 +11,8 @@ CGrille::CGrille(void) {
 }
 
 CGrille::CGrille(CGrille & GRIUnSudoku) {
-	unsigned int uiBoucle ,uiBoucle2;
+	unsigned int uiBoucle;
+	unsigned int uiBoucle2;
 
 	uiGRITaille = GRIUnSudoku.uiGRITaille;
 	ppuiGRIGrille = new unsigned int * [uiGRITaille];
@@ -50,12 +51,13 @@ CGrille::CGrille(unsigned int ** ppuiUneGrille, unsigned int uiUneTaille) {
 }
 
 CGrille::~CGrille(void) {
-	unsigned int uiBoucle;
+	if (ppuiGRIGrille != NULL) {
+		unsigned int uiBoucle;
 
-	for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
-		delete [] ppuiGRIGrille[uiBoucle];
-	delete [] ppuiGRIGrille;
-	
+		for (uiBoucle = 0; uiBoucle < uiGRITaille; ++uiBoucle)
+			delete [] ppuiGRIGrille[uiBoucle];
+		delete [] ppuiGRIGrille;
+	}
 }
 
 unsigned int CGrille::GRILireTaille() {
@@ -63,14 +65,30 @@ unsigned int CGrille::GRILireTaille() {
 }
 
 unsigned int CGrille::GRILireValeur(unsigned int uiLigne, unsigned int uiColonne) {
+	if ((uiLigne < 0 || uiLigne >= uiGRITaille) || (uiColonne < 0 || uiColonne >= uiGRITaille)) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
 	return ppuiGRIGrille[uiLigne][uiColonne];
 }
 
 void CGrille::GRIModifierValeur(unsigned int uiLigne, unsigned int uiColonne, unsigned int uiValeur) {
+	if ((uiLigne < 0 || uiLigne >= uiGRITaille) || (uiColonne < 0 || uiColonne >= uiGRITaille)) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
+	if (uiValeur < 0 || uiValeur > uiGRITaille) {
+		// Lever exception (Valeur incorrecte)
+		throw CExcept(EXC_VAL_INC);
+	}
 	ppuiGRIGrille[uiLigne][uiColonne] = uiValeur;
 }
 
 unsigned int CGrille::GRIRecupererZone(unsigned int uiLigne, unsigned int uiColonne) {
+	if ((uiLigne < 0 || uiLigne >= uiGRITaille) || (uiColonne < 0 || uiColonne >= uiGRITaille)) {
+		// Lever exception (index incorrect)
+		throw CExcept(EXC_IDX_ERR);
+	}
 	if (uiLigne < 3) {
 		if (uiColonne < 3)
 			return 1;
