@@ -63,7 +63,7 @@ bool CSolveur::SLVEstValide(unsigned int uiPosition) {
 	return false;
 }
 
-void CSolveur::SLVResoudre(void) {
+bool CSolveur::SLVResoudre(void) {
 	// Timer avant resolution
 	time_t tDebut;
 	// Timer apres resolution
@@ -79,12 +79,14 @@ void CSolveur::SLVResoudre(void) {
 	time(&tDebut);
 	luiDebut = difftime(tDebut ,mktime(&tmReference));
 
-	SLVEstValide(0);
+	if (!SLVEstValide(0))
+		return false;
 	// Difference entre le timer de reference et celui d'apres resolution
 	time(&tFin);
 	luiFin = difftime(tFin ,mktime(&tmReference));
 	// Difference entre la fin et le debut de resolution
 	luiSLVTempsResolution = luiFin - luiDebut;
+	return true;
 }
 
 void CSolveur::SLVAfficherStatistiques(void) {

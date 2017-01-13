@@ -250,8 +250,11 @@ void CPartie::PARJouer() {
 					PARSauvegarderPartie();
 				if (uiChoix == 6) {
 					CSolveur SLVSolveur(pGRIGrille);
-					SLVSolveur.SLVResoudre();
-					SLVSolveur.SLVAfficherStatistiques();
+					bool bResolu = SLVSolveur.SLVResoudre();
+					if (bResolu)
+						SLVSolveur.SLVAfficherStatistiques();
+					else
+						cout << endl << "!!! GRILLE INCORRECTE !!!" << endl;
 					PARAfficherGrilleAvecCouleurs();
 					uiPARCasesRemplies = uiPARTaille * uiPARTaille;
 					uiPARNbCoups = 0;
