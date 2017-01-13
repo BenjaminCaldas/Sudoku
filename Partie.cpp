@@ -272,7 +272,7 @@ void CPartie::PARJouer() {
 }
 
 void CPartie::PARSauvegarderPartie() {
-	string sNomFichier = "./Parties/" + sPARNomJoueur + ".txt";
+	string sNomFichier = "Parties\\" + sPARNomJoueur + ".txt";
 	ofstream oFichier(sNomFichier.c_str());
 
 	if (oFichier) {

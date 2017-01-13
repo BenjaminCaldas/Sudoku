@@ -52,7 +52,7 @@ CPartie * CChargeurPartie::CHPNouvellePartie(void) {
 	cout << sCHPNomJoueur;
 
 	// Generer une grille dans le dossier ./Grilles/
-	DIR * dRep = opendir("./Grilles/");
+	DIR * dRep = opendir("Grilles\\");
 	unsigned int uiNbFichiers = 0;
 	if (dRep != NULL)
 		uiNbFichiers = CHPCompterNombreFichiers(dRep);
@@ -68,7 +68,7 @@ CPartie * CChargeurPartie::CHPNouvellePartie(void) {
 		unsigned int uiNumGrilleAleatoire = rand() % (uiNbFichiers - 2) + 1;
 
 		// Ouverture du fichier correspondant au numero de la grille
-		string sNomFichier = "./Grilles/Grille";
+		string sNomFichier = "Grilles\\Grille";
 		string sNumFichier = to_string(uiNumGrilleAleatoire);
 		string sExtension = ".txt";
 		string sChemin = sNomFichier + sNumFichier + sExtension;
@@ -134,7 +134,7 @@ unsigned int CChargeurPartie::CHPCompterNombreFichiers(DIR * dUnRepertoire) {
 
 CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 	CPartie * PARPartie = NULL;
-	DIR * dRep = opendir("./Parties/");
+	DIR * dRep = opendir("Parties\\");
 	unsigned int uiNbFichiers = 0;
 	if (dRep != NULL)
 		uiNbFichiers = CHPCompterNombreFichiers(dRep);
@@ -152,7 +152,7 @@ CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 		cout << endl << "Il y a " << uiNbStrings << " parties sauvegardees : " << endl << endl;
 		uiNbFichiers = 0;
 		uiNbStrings = 0;
-		dRep = opendir("./Parties/");
+		dRep = opendir("Parties\\");
 		if (dRep != NULL) {
 			struct dirent * ent;
 			while ((ent = readdir(dRep)) != NULL) {
@@ -186,7 +186,7 @@ CPartie *  CChargeurPartie::CHPChargerPartie(void) {
 			}
 		}
 		cout << "Vous avez choisit de generer la partie : " << psParties[uiNumFichier - 1] << endl;
-		PARPartie = CHPLireFichier("./Parties/" + psParties[uiNumFichier - 1]);
+		PARPartie = CHPLireFichier("Parties\\" + psParties[uiNumFichier - 1]);
 		delete [] psParties;
 	}
 	else {
