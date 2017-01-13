@@ -77,7 +77,7 @@ unsigned int * CPartie::PARDemanderCoordonnees() {
 				uiCoord[1] = 0;
 			}
 		}
-		if (PARVerifierCoordonneesGrilleOrigine(uiCoord[0], uiCoord[1]) == 0) {
+		if (PARVerifierCoordonneesGrilleOrigine(uiCoord[0] - 1, uiCoord[1] - 1) == 0) {
 				cout << "Coordonnees de la grille d'origine !" << endl;
 				uiCoord[0] = 0;
 				uiCoord[1] = 0;
@@ -85,6 +85,7 @@ unsigned int * CPartie::PARDemanderCoordonnees() {
 	}
 	uiCoord[0] -= 1;
 	uiCoord[1] -= 1;
+	cout << uiCoord[0] << ", " << uiCoord[1] << endl;
 	return uiCoord;
 }
 
