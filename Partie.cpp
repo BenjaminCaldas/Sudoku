@@ -67,7 +67,6 @@ unsigned int * CPartie::PARDemanderCoordonnees() {
 				uiCoord[0] = 0;
 			}
 		}
-		uiCoord[0] -= 1;
 		// On récupère la colonne
 		while (uiCoord[1] == 0) {
 			cout << "Colonne : ";
@@ -78,13 +77,14 @@ unsigned int * CPartie::PARDemanderCoordonnees() {
 				uiCoord[1] = 0;
 			}
 		}
-		uiCoord[1] -= 1;
 		if (PARVerifierCoordonneesGrilleOrigine(uiCoord[0], uiCoord[1]) == 0) {
 				cout << "Coordonnees de la grille d'origine !" << endl;
 				uiCoord[0] = 0;
 				uiCoord[1] = 0;
 		}
 	}
+	uiCoord[0] -= 1;
+	uiCoord[1] -= 1;
 	return uiCoord;
 }
 
