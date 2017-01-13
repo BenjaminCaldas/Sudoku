@@ -305,6 +305,6 @@ void CPartie::PARSauvegarderPartie() {
 	}
 	else {
 		// Lever Exception
-		cout << "Erreur d'ouverture !" << endl;
+		throw CExcept(EXC_OUV_FIC);
 	}
 }
